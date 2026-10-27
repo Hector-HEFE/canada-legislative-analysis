@@ -1,0 +1,15 @@
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Python / editor / operating system files
+__pycache__/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local data files: review before publishing
+data/raw/*
+data/processed/*

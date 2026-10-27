@@ -51,3 +51,6 @@ SELECT
 FROM public.bills_staging
 GROUP BY parliament_number, session_number
 ORDER BY parliament_number, session_number;
+
+
+-- delete this line later
