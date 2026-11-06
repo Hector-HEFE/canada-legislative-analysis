@@ -1,5 +1,4 @@
 -- Verify government bill classification
-
 SELECT
     bill_document_type_name_en,
     is_government_bill,
@@ -12,7 +11,6 @@ ORDER BY bill_document_type_name_en;
 
 
 -- Inspect chamber information
-
 SELECT
     originating_chamber_organization_id,
     originating_chamber_name_en,
@@ -29,7 +27,6 @@ ORDER BY bill_count DESC;
 
 
 -- Inspect actual values in the raw records
-
 SELECT
     number_code,
     bill_document_type_name_en,
@@ -45,7 +42,6 @@ LIMIT 15;
 
 
 -- Verify the bill stages structure
-
 SELECT
     number_code,
     LEFT(bill_stages, 1000) AS bill_stages_sample,

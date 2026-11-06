@@ -24,6 +24,7 @@ ORDER BY populated_percentage ASC, column_name;
 
 
 
+
 -- Inspect the values and frequency of key categorical fields
 SELECT
     'Bill status' AS field,
@@ -69,6 +70,8 @@ FROM public.bills_staging
 GROUP BY bill_form_name_en
 
 ORDER BY field, records DESC;
+
+
 
 
 -- Let's see what the nested fields actually look like
