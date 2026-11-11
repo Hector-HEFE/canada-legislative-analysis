@@ -95,7 +95,7 @@ FROM (
      'https://www.ourcommons.ca/procedure/procedure-and-practice-4/app12-e.html'),
 
     -- Mark Carney
-    ('Mark Carney', '2025-03-14', '2025-04-28', 152, 338, 'Minority',
+    ('Mark Carney', '2025-03-14', '2025-04-28', 153, 338, 'Minority',
      'https://elections.ca/content.aspx?dir=rep%2Foff%2Fsta_ge45&document=p2&lang=e&section=res'),
     ('Mark Carney', '2025-04-28', '2026-04-13', 169, 343, 'Minority',
      'https://elections.ca/content.aspx?dir=rep%2Foff%2Fsta_ge45&document=p2&lang=e&section=res'),
