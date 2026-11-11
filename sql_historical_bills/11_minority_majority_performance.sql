@@ -78,4 +78,137 @@ ORDER BY government_status;
 
 
 
--- 
+-- Compare majority and minority governments days to royal assent
+SELECT
+    government_status,
+
+    COUNT(*) AS bills_passed,
+
+    ROUND(AVG(days_to_royal_assent), 1)
+        AS average_days_to_royal_assent,
+
+    PERCENTILE_CONT(0.5) WITHIN GROUP (
+        ORDER BY days_to_royal_assent
+    ) AS median_days_to_royal_assent,
+
+    MIN(days_to_royal_assent)
+        AS minimum_days,
+
+    MAX(days_to_royal_assent)
+        AS maximum_days
+
+FROM public.bills_with_government
+
+WHERE
+    prime_minister IS NOT NULL
+    AND bill_type IN (
+        'House Government Bill',
+        'Senate Government Bill'
+    )
+    AND received_royal_assent = TRUE
+    AND days_to_royal_assent IS NOT NULL
+
+GROUP BY government_status
+ORDER BY government_status;
+
+
+
+-- Compare majority and minority governments days to royal assent, by originating chamber.
+SELECT
+    government_status,
+    originating_chamber,
+
+    COUNT(*) AS bills_passed,
+
+    ROUND(
+        AVG(days_to_royal_assent), 1
+    ) AS average_days,
+
+    PERCENTILE_CONT(0.5) WITHIN GROUP (
+        ORDER BY days_to_royal_assent
+    ) AS median_days,
+
+    PERCENTILE_CONT(0.75) WITHIN GROUP (
+        ORDER BY days_to_royal_assent
+    ) AS percentile_75_days,
+
+    PERCENTILE_CONT(0.90) WITHIN GROUP (
+        ORDER BY days_to_royal_assent
+    ) AS percentile_90_days
+
+FROM public.bills_with_government
+
+WHERE
+    prime_minister IS NOT NULL
+    AND bill_type IN (
+        'House Government Bill',
+        'Senate Government Bill'
+    )
+    AND received_royal_assent = TRUE
+    AND days_to_royal_assent IS NOT NULL
+
+GROUP BY
+    government_status,
+    originating_chamber
+
+ORDER BY
+    originating_chamber,
+    government_status;
+
+
+
+-- Compare majority and minority government bills introduced by legislative type and originating chamber.
+SELECT
+    government_status,
+    bill_type,
+    originating_chamber,
+
+    COUNT(*) AS total_bills,
+
+    COUNT(*) FILTER (
+        WHERE bill_status = 'Royal assent received'
+    ) AS passed,
+
+    COUNT(*) FILTER (
+        WHERE bill_status = 'Bill defeated'
+    ) AS defeated,
+
+    COUNT(*) FILTER (
+        WHERE bill_status = 'Bill not proceeded with'
+    ) AS not_proceeded_with,
+
+    COUNT(*) FILTER (
+        WHERE bill_status = 'Introduced as pro forma bill'
+    ) AS pro_forma,
+
+    COUNT(*) FILTER (
+        WHERE bill_status IS NULL
+    ) AS missing_status,
+
+    COUNT(*) FILTER (
+        WHERE bill_status IS NOT NULL
+          AND bill_status NOT IN (
+              'Royal assent received',
+              'Bill defeated',
+              'Bill not proceeded with',
+              'Introduced as pro forma bill'
+          )
+    ) AS other_in_process_statuses
+
+FROM public.bills_with_government
+
+WHERE
+    prime_minister IS NOT NULL
+    AND bill_type IN (
+        'House Government Bill',
+        'Senate Government Bill'
+    )
+
+GROUP BY
+    government_status,
+    bill_type,
+    originating_chamber
+
+ORDER BY
+    bill_type,
+    government_status;

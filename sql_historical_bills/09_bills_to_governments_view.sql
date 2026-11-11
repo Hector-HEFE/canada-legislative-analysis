@@ -1,7 +1,6 @@
 
 -- Create the view
 CREATE OR REPLACE VIEW public.bills_with_government AS
-
 WITH bill_dates AS (
     SELECT
         b.*,
@@ -14,31 +13,22 @@ WITH bill_dates AS (
         END AS introduction_date
     FROM public.bills_historical_clean b
 )
-
 SELECT
     b.*,
     g.government_id,
     g.prime_minister,
     g.governing_party,
-    s.government_status
-
+    s.government_status,
+    g.start_date AS government_start_date,
+    g.end_date AS government_end_date
 FROM bill_dates b
-
 LEFT JOIN public.governments g
     ON b.introduction_date >= g.start_date
-    AND (
-        b.introduction_date < g.end_date
-        OR g.end_date IS NULL
-    )
-
+    AND (b.introduction_date < g.end_date OR g.end_date IS NULL)
 LEFT JOIN public.government_seat_status s
     ON g.government_id = s.government_id
     AND b.introduction_date >= s.status_start_date
-    AND (
-        b.introduction_date < s.status_end_date
-        OR s.status_end_date IS NULL
-    );
-
+    AND (b.introduction_date < s.status_end_date OR s.status_end_date IS NULL);
 
 
 -- See bills attributed to governments
