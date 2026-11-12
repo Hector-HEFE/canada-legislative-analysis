@@ -7,7 +7,6 @@ WITH date_bounds AS (
     FROM public.bills_with_government
     WHERE introduction_date IS NOT NULL
 ),
-
 -- Clip each majority/minority period to the dates covered by our bill data
 status_periods AS (
     SELECT
@@ -22,7 +21,6 @@ status_periods AS (
     WHERE s.status_start_date < d.last_date + 1
       AND COALESCE(s.status_end_date, d.last_date + 1) > d.first_date
 ),
-
 -- Calculate the total observed days under each type of government
 status_days AS (
     SELECT
@@ -32,7 +30,6 @@ status_days AS (
     WHERE period_start < period_end
     GROUP BY government_status
 ),
-
 -- Count introductions by government status and bill type
 bill_counts AS (
     SELECT
@@ -44,13 +41,11 @@ bill_counts AS (
       AND government_status IS NOT NULL
     GROUP BY government_status, bill_type
 ),
-
 bill_types AS (
     SELECT DISTINCT bill_type
     FROM public.bills_with_government
     WHERE bill_type IS NOT NULL
 )
-
 SELECT
     sd.government_status,
     bt.bill_type,
@@ -80,7 +75,6 @@ WITH date_bounds AS (
     FROM public.bills_with_government
     WHERE introduction_date IS NOT NULL
 ),
-
 status_periods AS (
     SELECT
         GREATEST(s.status_start_date, d.first_date) AS period_start,
@@ -93,7 +87,6 @@ status_periods AS (
     WHERE s.status_start_date < d.last_date + 1
       AND COALESCE(s.status_end_date, d.last_date + 1) > d.first_date
 )
-
 SELECT
     (d.last_date - d.first_date + 1) AS calendar_days,
     SUM(p.period_end - p.period_start) AS classified_status_days,
