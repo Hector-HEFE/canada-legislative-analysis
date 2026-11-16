@@ -133,3 +133,36 @@ FROM public.bills_historical_staging;
 
 
 
+--
+SELECT
+    bill_id,
+    bill_number,
+    parliament_number,
+    session_number,
+    bill_type,
+    introduction_date,
+    prime_minister,
+    governing_party,
+    government_status,
+    bill_status,
+    received_royal_assent,
+    royal_assent_date,
+    did_reinstate_from_previous_session,
+    short_title,
+    bill_title
+FROM public.bills_with_government
+WHERE bill_id::TEXT IN (
+    '9727',
+    '9978',
+    '539391',
+    '1181615',
+    '1394915',
+    '2153041',
+    '3073041',
+    '3648551',
+    '4327884'
+)
+ORDER BY parliament_number, session_number, introduction_date;
+
+
+
