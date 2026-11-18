@@ -278,11 +278,7 @@ ORDER BY
     b.session_number,
     b.bill_number;
 
-
-
-
 -- Inspect direct relationships within component 9104
-
 SELECT
     e.node_a AS bill_id_a,
     a.bill_number AS bill_number_a,
@@ -297,30 +293,22 @@ SELECT
     b.bill_title AS title_b
 
 FROM public.bill_similarity_edges_work e
-
 JOIN public.bill_similarity_labels_work la
     ON e.node_a = la.node_id
-
 JOIN public.bill_similarity_labels_work lb
     ON e.node_b = lb.node_id
-
 JOIN public.bills_with_government a
     ON e.node_a = a.bill_id::BIGINT
-
 JOIN public.bills_with_government b
     ON e.node_b = b.bill_id::BIGINT
-
 WHERE la.component_id = 9104
   AND lb.component_id = 9104
-
 ORDER BY
     a.parliament_number,
     a.session_number,
     a.bill_number,
     b.parliament_number,
     b.session_number;
-
-
 
 -- checking the original bill_similarities records for the four unexplained connections, alongside their extraction records
 WITH target_pairs AS (
