@@ -33,7 +33,7 @@ FROM public.vw_bill_explorer b;
 
 
 
--- Run the export from the VS Code terminal
+/* Run the export from the VS Code terminal
 
 & "C:\Program Files\PostgreSQL\18\bin\psql.exe" `
     -h localhost `
@@ -45,4 +45,26 @@ FROM public.vw_bill_explorer b;
     -q `
     -v ON_ERROR_STOP=1 `
     -f "export_queries/20_02_export_bill_explorer.sql" `
-    -o "export_queries/export_bill_explorer_view.json"
+    -o "data/processed/export_bill_explorer_view.json"
+
+Verify the JSON file
+
+$json = Get-Content "data/processed/export_bill_explorer_view.json" -Raw | ConvertFrom-Json
+
+$json.schema_version
+$json.total_bills
+$json.bills.Count
+*/
+
+/* Inspect the exported structure
+$json = Get-Content "data/processed/export_bill_explorer_view.json" -Raw | ConvertFrom-Json
+
+# Inspect metadata
+$json | Select-Object schema_version, generated_at, total_bills
+
+# Inspect the first bill
+$json.bills[0] | Format-List *
+
+# Inspect the available fields
+$json.bills[0].PSObject.Properties.Name
+*/
